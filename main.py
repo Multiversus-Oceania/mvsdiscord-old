@@ -1,12 +1,15 @@
-import discord, os
+import discord
+from discord.ext import commands
 
-client = discord.Client(intents=discord.Intents.default())
-token = os.environ['DISCORD_BOT_TOKEN']
+# Create a new bot instance
+bot = commands.Bot(command_prefix='!')
 
-@client.event
-async def on_message(message):
-    if message.content.startswith('!hello'):
-        await message.channel.send('Hello!')
+# Define the hello command
+@bot.command()
+async def hello(ctx):
+    await ctx.send('Hello!')
 
-client.run(token)
-
+# Use the token to authenticate the bot
+with open('token.txt') as f:
+    token = f.read()
+bot.run(token)
