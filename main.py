@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 # Create a new bot instance
-bot = commands.Bot(command_prefix='!', intents=discord.Intents.default())
+bot = commands.Bot(command_prefix='!', intents=discord.Intents.default(), privileged_intents=discord.Intents.all())
 
 # Define the hello command
 @bot.command()
