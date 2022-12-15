@@ -28,18 +28,14 @@ async def on_ready():
 
 @bot.command()
 async def get2v2elo(ctx, username):
-    users = mlp.get_user_by_username(username)
-    print("account id" + users.get_account_id())
-    leaderboard = mlp.get_user_leaderboard(users.get_account_id())
-    print(leaderboard.get_score_in_gamemode(GamemodeRank.TwoVsTwo))
+    user = mlp.get_user_by_username(username)
+    leaderboard = mlp.get_user_leaderboard(user.get_account_id())
     await ctx.send(leaderboard.get_score_in_gamemode(GamemodeRank.TwoVsTwo))
     
 @bot.command()
 async def get1v1elo(ctx, username):
-    users = mlp.get_user_by_username(username)
-    print("account id" + users.get_account_id())
-    leaderboard = mlp.get_user_leaderboard(users.get_account_id())
-    print(leaderboard.get_score_in_gamemode(GamemodeRank.OneVsOne))
+    user = mlp.get_user_by_username(username)
+    leaderboard = mlp.get_user_leaderboard(user.get_account_id())
     await ctx.send(leaderboard.get_score_in_gamemode(GamemodeRank.OneVsOne))  
 
 bot.run(discordtoken)
