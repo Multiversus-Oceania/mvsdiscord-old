@@ -1,9 +1,8 @@
 import discord
 from discord.ext import commands
 import random
-from mulpyversus.mulpyversus import *
-from mulpyversus.asyncmulpyversus import AsyncMulpyVersus
-
+from mulpyversus.mulpyversus import MulpyVersus
+from mulpyversus.leaderboards import *
 description = '''An example bot to showcase the discord.ext.commands extension
 module.
 There are a number of utility commands being showcased here.'''
@@ -13,16 +12,15 @@ intents.members = True
 intents.message_content = True
 
 bot = commands.Bot(command_prefix='?', description=description, intents=intents)
+
 with open('token.txt', 'r') as f:
-    token = f.read()
+    discordtoken = f.read()
 with open('multiversustoken.txt', 'r') as f:
     multiversustoken = f.read()
+    multiversustoken = multiversustoken.replace("\n", "")
 
-mlp = AsyncMulpyVersus(multiversustoken)
+mlp = MulpyVersus(multiversustoken)
 
-mlp.init()
-
-    
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
@@ -82,4 +80,20 @@ async def _bot(ctx):
     await ctx.send('Yes, the bot is cool.')
 
 
-bot.run(token)
+@bot.command()
+async def get2v2elo(ctx, username):
+    users = mlp.get_user_by_username(username)
+    print("account id" + users.get_account_id())
+    leaderboard = mlp.get_user_leaderboard(users.get_account_id())
+    print(leaderboard.get_score_in_gamemode(GamemodeRank.TwoVsTwo))
+    await ctx.send(leaderboard.get_score_in_gamemode(GamemodeRank.TwoVsTwo))
+    
+@bot.command()
+async def get1v1elo(ctx, username):
+    users = mlp.get_user_by_username(username)
+    print("account id" + users.get_account_id())
+    leaderboard = mlp.get_user_leaderboard(users.get_account_id())
+    print(leaderboard.get_score_in_gamemode(GamemodeRank.OneVsOne))
+    await ctx.send(leaderboard.get_score_in_gamemode(GamemodeRank.OneVsOne))  
+
+bot.run(discordtoken)
