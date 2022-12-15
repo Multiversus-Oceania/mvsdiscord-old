@@ -1,2 +1,2 @@
 # MVSOCE Discord Bot
-discord.gg/mvsoce
+https://discord.gg/mvsoce
