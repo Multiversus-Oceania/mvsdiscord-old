@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 import random
+from mulpyversus.mulpyversus import *
+from mulpyversus.asyncmulpyversus import AsyncMulpyVersus
 
 description = '''An example bot to showcase the discord.ext.commands extension
 module.
@@ -13,7 +15,14 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='?', description=description, intents=intents)
 with open('token.txt', 'r') as f:
     token = f.read()
+with open('multiversustoken.txt', 'r') as f:
+    multiversustoken = f.read()
 
+mlp = AsyncMulpyVersus(multiversustoken)
+
+mlp.init()
+
+    
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
