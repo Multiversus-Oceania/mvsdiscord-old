@@ -5,3 +5,7 @@ steam-ticket-generator-linux*
 package.json
 package-lock.json
 .node_modules
+.env
+config.json
+jsbot/node_modules
+jsbot/config.json
