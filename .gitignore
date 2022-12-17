@@ -7,5 +7,5 @@ package-lock.json
 .node_modules
 .env
 config.json
-jsbot/node_modules
-jsbot/config.json
+node_modules
+config.json
