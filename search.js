@@ -10,8 +10,7 @@ async function getidfromusername(user) {
         search = await mvs_client.profiles.search(user);
         const searchlength = search.results.length;
         if (searchlength == 1) {
-            const profile = await mvs_client.profiles.search(user);
-            const user_id = profile.results[0].result.account_id;
+            const user_id = search.results[0].result.account_id;
             resolve(user_id);
         }
         else {
