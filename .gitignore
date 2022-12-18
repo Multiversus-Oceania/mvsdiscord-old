@@ -9,3 +9,4 @@ package-lock.json
 config.json
 node_modules/
 config.json
+users.json
