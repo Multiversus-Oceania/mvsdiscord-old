@@ -18,7 +18,7 @@ module.exports = {
             console.log(score1v1.score)
             console.log(score2v2.score)
             console.log("1v1: " + score1v1.score + " 2v2: " + score2v2.score)
-            string = string.concat("1v1: " + parseInt(score1v1.score) + " 2v2: " + parseInt(score2v2.score));
+            string = string.concat("user:" + user + "1v1: " + parseInt(score1v1.score) + " 2v2: " + parseInt(score2v2.score));
         }
         else {
             console.log(search)
