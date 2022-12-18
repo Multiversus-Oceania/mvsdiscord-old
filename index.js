@@ -6,7 +6,7 @@
 	const { token } = require('./config.json');
 	const { Client: MVSClient } = require('multiversus.js');
 	const generatemvstoken = require('./generatemvstoken.js');
-	const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+	const client = new Client({ intents: [GatewayIntentBits["Guilds"]] });
 	client.commands = new Collection();
 	const commandsPath = path.join(__dirname, 'commands');
 	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
@@ -29,6 +29,8 @@
 	}
 	const mvstoken = await generatemvstoken.getAccessToken();
 	const str_token = JSON.stringify(mvstoken);
-	mvs_client = new MVSClient({ accessToken: str_token });
+	let mvs_client;
+	mvs_client = await new MVSClient({accessToken: str_token});
+	client.mvs_client = mvs_client;
 	await client.login(token);
 })();
