@@ -31,4 +31,5 @@
 	const str_token = JSON.stringify(mvstoken);
 	mvs_client = new MVSClient({accessToken: str_token});
 	await client.login(token);
+	//test
 })();
