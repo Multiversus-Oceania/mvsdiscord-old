@@ -5,10 +5,10 @@ on:
       - main
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-  token: ${{ secrets.token }}
-  multiversus_token: ${{ secrets.multiversus_token }}
-  clientId: ${{ secrets.clientId }}
-  guildId: ${{ secrets.guildId }}
+  token: ${{ secrets.TOKEN }}
+  multiversus_token: ${{ secrets.MULTIVERSUS_TOKEN }}
+  clientId: ${{ secrets.CLIENTID }}
+  guildId: ${{ secrets.GUILDID }}
   
 jobs:
   deploy:
