@@ -10,6 +10,8 @@ processes = []
 
 [env]
   PORT = "8080"
+  PORT = "53"
+
 
 [experimental]
   allowed_public_ports = []
@@ -36,8 +38,8 @@ processes = []
     port = 443
 
   [[services.tcp_checks]]
-    grace_period = "1s"
-    interval = "15s"
+    grace_period = "5s"
+    interval = "30s"
     restart_limit = 0
     timeout = "2s"
 
