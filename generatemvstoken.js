@@ -33,7 +33,7 @@ async function getAccessToken() {
       JSON.stringify({
         auth: {
           fail_on_missing: 1,
-          steam: process.env.multiversus_token,
+          steam: process.env.MULTIVERSUS_TOKEN,
         },
         options: ["wb_network"],
       }),
