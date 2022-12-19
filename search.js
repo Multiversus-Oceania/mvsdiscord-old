@@ -38,8 +38,8 @@ async function getusernamefromid(user_id, platform = 'wb_network') {
         else {
             console.log("account_data: " + account_data);
             console.log("platform: " + platform);
-            console.log("account_data.identity.alternate.platform: " + account_data.identity.alternate.platform);
-            const username = account_data.identity.alternate.platform[0].username;
+            console.log("account_data.identity.alternate[platform] " + account_data.identity.alternate[platform]);
+            const username = account_data.identity.alternate[platform][0].username;
             console.log("username: " + username);
             resolve(username);
         }
