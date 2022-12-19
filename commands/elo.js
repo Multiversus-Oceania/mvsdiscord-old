@@ -16,7 +16,11 @@ module.exports = {
         if (arg1 !== 'No user provided') {
             username = interaction.options.getString('user');
             const user_id = await getidfromusername(username);
-            const wbname = await getusernamefromid(user_id)
+            if (user_id === 'Couldn\'t find user') {
+                await interaction.editReply('Couldn\'t find user');
+                return;
+            }
+            const wbname = await getusernamefromid(user_id);
             const score1v1 = await requestData("/leaderboards/1v1/score-and-rank/" + user_id, mvs_client.accessToken);
             const score2v2 = await requestData("/leaderboards/2v2/score-and-rank/" + user_id, mvs_client.accessToken);
             console.log(score1v1.score);

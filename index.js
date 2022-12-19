@@ -1,4 +1,6 @@
 
+// noinspection JSUndeclaredVariable
+
 (async () => {
 	const fs = require('node:fs');
 	const path = require('node:path');
@@ -31,5 +33,4 @@
 	const str_token = JSON.stringify(mvstoken);
 	mvs_client = new MVSClient({accessToken: str_token});
 	await client.login(token);
-	//test
 })();

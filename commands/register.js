@@ -9,6 +9,7 @@ module.exports = {
     .addStringOption(option => option.setName('username').setDescription('Your Warner Bros username (in game name)').setRequired(true)),
   async execute(interaction) {
     // Get the username from the command options
+    await interaction.deferReply();
     const username = interaction.options.getString('username');
     const wbid = await getidfromusername(username);
     const wbuser = await getusernamefromid(wbid);
@@ -17,6 +18,6 @@ module.exports = {
     addUserToJSONFile(user);
 
     // Reply to the user to confirm that their username has been registered
-    await interaction.reply(`Your Warner Bros username has been registered as "${username}"`);
+    await interaction.editReply(`Your Warner Bros username has been registered as "${username}"`);
   },
 };

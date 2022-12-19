@@ -17,6 +17,7 @@ async function getidfromusername(user) {
             for (i = 0; i < searchlength; i++) {
                 const user_id = search.results[i].result.account_id
                 const account_data = await getaccountdata(user_id);
+                console.log(account_data.identity.alternate.wb_network[0]);
                 const username = account_data.identity.alternate.wb_network[0].username;
                 if (username.toLowerCase() === user.toLowerCase()) {
                     resolve(user_id);
@@ -30,6 +31,8 @@ async function getidfromusername(user) {
 async function getusernamefromid(user_id) {
     return new Promise(async (resolve, reject) => {
         const account_data = await getaccountdata(user_id);
+        console.log(account_data.identity.alternate);
+        console.log(account_data.identity.alternate.wb_network[0]);
         username = account_data.identity.alternate.wb_network[0].username;
         resolve(username);
     });
