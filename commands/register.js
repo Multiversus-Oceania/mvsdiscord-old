@@ -7,8 +7,7 @@ module.exports = {
     .setName('register')
     .setDescription('Registers your Warner Bros username (in game name) and links to your Discord account')
     .addStringOption(option => option.setName('username').setDescription('Your Warner Bros username (in game name)').setRequired(true))
-    .addStringOption(option => option.setName('platform').setDescription('Specify your platform if you have more than one Multiversus account linked to your WB Id. ' +
-        'Normally leave default unless this command registers the wrong account.').setChoices(['ps4', 'xb1', 'epic', 'steam']).setRequired(false)),
+    .addStringOption(option => option.setName('platform').setDescription('Specify platform (only use if assigned wrong platform)').setChoices(['ps4', 'xb1', 'epic', 'steam']).setRequired(false)),
   async execute(interaction) {
     // Get the username from the command options
     await interaction.deferReply();
