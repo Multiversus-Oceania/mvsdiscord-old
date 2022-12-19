@@ -1,0 +1,20 @@
+name: Fly Deploy
+on:
+  push:
+    branches:
+      - main
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  token: ${{ secrets.token }}
+  multiversus_token: ${{ secrets.multiversus_token }}
+  clientId: ${{ secrets.clientId }}
+  guildId: ${{ secrets.guildId }}
+  
+jobs:
+  deploy:
+      name: Deploy app
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: superfly/flyctl-actions/setup-flyctl@master
+        - run: flyctl deploy --remote-only
