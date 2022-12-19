@@ -28,7 +28,7 @@ async function getidfromusername(user) {
     });
 }
 
-async function getusernamefromid(user_id, platform) {
+async function getusernamefromid(user_id, platform = 'wb_network') {
     return new Promise(async (resolve, reject) => {
         const account_data = await getaccountdata(user_id);
         if (platform === 'wb_network') {
