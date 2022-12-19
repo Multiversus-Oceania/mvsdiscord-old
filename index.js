@@ -32,6 +32,7 @@
 	const mvstoken = await generatemvstoken.getAccessToken();
 	const str_token = JSON.stringify(mvstoken);
 	mvs_client = new MVSClient({accessToken: str_token});
+	console.log("process.env.token: " + process.env.token);
 	console.log("process.env.TOKEN: " + process.env.TOKEN);
-	await client.login(String(process.env.TOKEN));
+	await client.login(process.env.TOKEN);
 })();
