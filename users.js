@@ -28,5 +28,27 @@ function addUserToJSONFile(user) {
   });
 }
 
+// function that removes a user from the JSON file
+function removeUserFromJSONFile(discordId) {
+    fs.readFile('/data/users.json', (err, data) => {
+        if (err) throw err;
+
+        let users = JSON.parse(data);
+        if (!users[discordId]) {
+        console.log(`User with Discord ID ${discordId} is not registered`);
+        return;
+        }
+
+        delete users[discordId];
+
+        fs.writeFile('/data/users.json', JSON.stringify(users), (err) => {
+        if (err) throw err;
+        console.log(`User with Discord ID ${discordId} was removed from the JSON file`);
+        });
+    });
+}
+
+
 module.exports.User = User;
 module.exports.addUserToJSONFile = addUserToJSONFile;
+module.exports.removeUserFromJSONFile = removeUserFromJSONFile;

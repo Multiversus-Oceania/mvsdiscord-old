@@ -28,12 +28,12 @@ async function getidfromusername(user) {
     });
 }
 
-async function getusernamefromid(user_id) {
+async function getusernamefromid(user_id, platform) {
     return new Promise(async (resolve, reject) => {
         const account_data = await getaccountdata(user_id);
         console.log(account_data.identity.alternate);
-        console.log(account_data.identity.alternate.wb_network[0]);
-        username = account_data.identity.alternate.wb_network[0].username;
+        console.log(account_data.identity.alternate[platform][0]);
+        username = account_data.identity.alternate[platform].username;
         resolve(username);
     });
 }
