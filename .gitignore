@@ -1,9 +1,6 @@
 token.txt
 .vscode
 multiversustoken.txt
-steam-ticket-generator-linux*
-package.json
-package-lock.json
 .node_modules
 .env
 config.json

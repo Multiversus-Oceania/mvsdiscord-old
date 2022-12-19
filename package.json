@@ -1,0 +1,24 @@
+{
+  "name": "mvsoce",
+  "version": "1.0.0",
+  "description": "https://discord.gg/mvsoce",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taeyeong2000/mvsoce.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/taeyeong2000/mvsoce/issues"
+  },
+  "homepage": "https://github.com/taeyeong2000/mvsoce#readme",
+  "dependencies": {
+    "discord.js": "^14.7.1",
+    "multiversus.js": "^2.1.3"
+  }
+}
