@@ -31,7 +31,6 @@ async function getidfromusername(user) {
 async function getusernamefromid(user_id, platform) {
     return new Promise(async (resolve, reject) => {
         const account_data = await getaccountdata(user_id);
-        const platform = platform;
         if (platform === 'wb_network') {
             const username = account_data.identity.alternate.wb_network[0].username;
             resolve(username);
