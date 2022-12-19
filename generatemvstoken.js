@@ -1,5 +1,3 @@
-const { multiversus_token } = require('./config.json');
-const token = multiversus_token
 const http = require("https");
 
 async function getAccessToken() {
@@ -35,7 +33,7 @@ async function getAccessToken() {
       JSON.stringify({
         auth: {
           fail_on_missing: 1,
-          steam: token,
+          steam: process.env.multiversus_token,
         },
         options: ["wb_network"],
       }),

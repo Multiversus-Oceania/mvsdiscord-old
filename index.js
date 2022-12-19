@@ -2,10 +2,10 @@
 // noinspection JSUndeclaredVariable
 
 (async () => {
+	require('dotenv').config();
 	const fs = require('node:fs');
 	const path = require('node:path');
 	const { Client, GatewayIntentBits, Collection } = require('discord.js');
-	const { token } = require('./config.json');
 	const { Client: MVSClient } = require('multiversus.js');
 	const generatemvstoken = require('./generatemvstoken.js');
 	const client = new Client({ intents: [GatewayIntentBits["Guilds"]] });
@@ -32,5 +32,5 @@
 	const mvstoken = await generatemvstoken.getAccessToken();
 	const str_token = JSON.stringify(mvstoken);
 	mvs_client = new MVSClient({accessToken: str_token});
-	await client.login(token);
+	await client.login(process.env.token);
 })();
