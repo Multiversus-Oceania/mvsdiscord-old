@@ -31,9 +31,8 @@ async function getidfromusername(user) {
 async function getusernamefromid(user_id, platform) {
     return new Promise(async (resolve, reject) => {
         const account_data = await getaccountdata(user_id);
-        console.log(account_data.identity.alternate);
-        console.log(account_data.identity.alternate[platform][0]);
-        username = account_data.identity.alternate[platform].username;
+        const username = account_data.identity.alternate[platform].username;
+        console.log("username: " + username);
         resolve(username);
     });
 }
