@@ -3,11 +3,27 @@
 
 (async () => {
 	require('dotenv').config();
+	const express = require('express');
+	const app = express();
+	const port = process.env.PORT || 3000;
 	const fs = require('node:fs');
 	const path = require('node:path');
 	const { Client, GatewayIntentBits, Collection } = require('discord.js');
 	const { Client: MVSClient } = require('multiversus.js');
 	const generatemvstoken = require('./generatemvstoken.js');
+
+	app.get(["/", "/:name"], (req, res) => {
+		greeting = "<h1>Hello From Node on Fly!</h1>";
+		name = req.params["name"];
+		if (name) {
+			res.send(greeting + "</br>and hello to " + name);
+		} else {
+			res.send(greeting);
+		}
+	});
+
+	app.listen(port, () => console.log(`HelloNode app listening on port ${port}!`));
+
 	const client = new Client({ intents: [GatewayIntentBits["Guilds"]] });
 	client.commands = new Collection();
 	const commandsPath = path.join(__dirname, 'commands');
