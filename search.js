@@ -37,7 +37,7 @@ async function getusernamefromid(user_id, platform) {
         }
         else {
             console.log("account_data: " + account_data);
-            const username = account_data.identity.alternate[platform].username;
+            const username = account_data.identity.alternate.platform.username;
             console.log("username: " + username);
             resolve(username);
         }
