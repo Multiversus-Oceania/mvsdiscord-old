@@ -9,7 +9,7 @@ class User {
 }
 
 function addUserToJSONFile(user) {
-  fs.readFile('users.json', (err, data) => {
+  fs.readFile('/data/users.json', (err, data) => {
     let users = {};
     if (!err) {
       users = JSON.parse(data);
@@ -21,7 +21,7 @@ function addUserToJSONFile(user) {
 
     users[user.discordId] = user;
 
-    fs.writeFile('users.json', JSON.stringify(users), (err) => {
+    fs.writeFile('/data/users.json', JSON.stringify(users), (err) => {
       if (err) throw err;
       console.log(`User with Discord ID ${user.discordId} was added to the JSON file`);
     });

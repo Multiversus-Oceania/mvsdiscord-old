@@ -30,7 +30,7 @@ module.exports = {
             await interaction.editReply(string);
         } else {
             // Check if the user has already registered their Warner Bros. in-game name
-            fs.readFile('users.json', async (err, data) => {
+            fs.readFile('/data/users.json', async (err, data) => {
                 if (err) throw err;
                 const users = JSON.parse(data);
                 const user = users[interaction.member.id];
