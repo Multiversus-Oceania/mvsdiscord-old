@@ -5,19 +5,21 @@ on:
       - main
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-
+  token: ${{ secrets.TOKEN }}
+  multiversus_token: ${{ secrets.MULTIVERSUS_TOKEN }}
+  clientId: ${{ secrets.CLIENTID }}
+  guildId: ${{ secrets.GUILDID }}
   
 jobs:
   deploy:
       name: Deploy app
       runs-on: ubuntu-latest
-      env:
-        token: ${{ secrets.TOKEN }}
-        multiversus_token: ${{ secrets.MULTIVERSUS_TOKEN }}
-        clientId: ${{ secrets.CLIENTID }}
-        guildId: ${{ secrets.GUILDID }}
       steps:
         - uses: actions/checkout@v3
-        - uses: superfly/flyctl-actions/setup-flyctl@master        
+        - uses: superfly/flyctl-actions/setup-flyctl@master
+        - run: echo "TOKEN=$token" > .env
+        - run: echo "MULTIVERSUS_TOKEN=$multiversus_token" >> .env
+        - run: echo "CLIENTID=$clientId" >> .env
+        - run: echo "GUILDID=$guildId" >> .env
         - run: flyctl wireguard websockets enable
         - run: flyctl deploy --remote-only
