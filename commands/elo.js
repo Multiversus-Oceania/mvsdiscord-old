@@ -23,8 +23,8 @@ module.exports = {
             const wbname = await getusernamefromid(user_id);
             const profile1s = await mvs_client.leaderboards.fetchProfile(user_id, '1v1');
             const profile2s = await mvs_client.leaderboards.fetchProfile(user_id, '2v2');
-            console.log("profile1s.keys(): " + profile1s.keys());
-            console.log("profile2s.keys() : " + profile2s.keys());
+            console.log("profile1s.keys: " + profile1s.keys);
+            console.log("profile2s.keys: " + profile2s.keys);
             const score1v1 = await requestData("/leaderboards/1v1/score-and-rank/" + user_id, mvs_client.accessToken);
             const score2v2 = await requestData("/leaderboards/2v2/score-and-rank/" + user_id, mvs_client.accessToken);
             console.log(score1v1.score);
