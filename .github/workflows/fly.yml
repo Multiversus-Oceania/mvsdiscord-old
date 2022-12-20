@@ -22,5 +22,6 @@ jobs:
         - run: echo "MULTIVERSUS_TOKEN=$multiversus_token" >> .env
         - run: echo "CLIENTID=$clientId" >> .env
         - run: echo "GUILDID=$guildId" >> .env
+        - run: echo "userspath=$userspath" >> .env
         - run: flyctl wireguard websockets enable
         - run: flyctl deploy --remote-only
