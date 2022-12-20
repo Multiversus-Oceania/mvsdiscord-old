@@ -110,8 +110,6 @@ async function formatProfile(profile, wbname, user_id, interaction) {
                 { name: '1v1', value: `Top character: ${top_1s}\nOverall rank: ${profile.OneVsOne.rank}\nElo: ${parseInt(profile.OneVsOne.score)}`, inline: true },
                 { name: '2v2', value: `Top character: ${top_2s}\nOverall rank: ${profile.TwoVsTwo.rank}\nElo: ${parseInt(profile.TwoVsTwo.score)}`, inline: true }
             )
-            .setImage(path1s)  // Set the image for the 1v1 character
-            .setImage(path2s);  // Set the image for the 2v2 character
         await interaction.editReply({ embeds: [embed], files: [file1s, file2s] });
         resolve(embed);
     });
