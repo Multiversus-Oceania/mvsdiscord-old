@@ -46,7 +46,6 @@
 		}
 	}
 	const mvstoken = await generatemvstoken.getAccessToken();
-	const str_token = JSON.stringify(mvstoken);
-	mvs_client = new MVSClient({accessToken: str_token});
+	mvs_client = new MVSClient({ accessToken: mvstoken });
 	await client.login(process.env.TOKEN);
 })();

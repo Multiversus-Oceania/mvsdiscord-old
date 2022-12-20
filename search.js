@@ -1,8 +1,20 @@
 const requestdata = require('./requestdata.js');
+const characters = require('./characters.js');
+const fs = require('fs');
+require('dotenv').config();
+const { EmbedBuilder } = require('discord.js');
+
 async function getaccountdata(user_id) {
     return new Promise(async (resolve, reject) => {
         const account_data = await requestdata.requestData("/accounts/" + user_id, mvs_client.accessToken);
         resolve(account_data);
+    });
+}
+
+async function getprofiledata(user_id) {
+    return new Promise(async (resolve, reject) => {
+        const profile_data = await requestdata.requestData("/profiles/" + user_id, mvs_client.accessToken);
+        resolve(profile_data);
     });
 }
 async function getidfromusername(user) {
@@ -67,9 +79,46 @@ async function getUserLeaderboard(id, gamemode="both") {
 });
 }
 
+async function getHighestRatedCharacter(user_id, gamemode) {
+    const profile = await getprofiledata(user_id);
+    if (gamemode === "1v1") {
+        return characters.slugToDisplay(profile['server_data']['1v1shuffle'][0].topRating.character);
+    }
+    else if (gamemode === "2v2") {
+        return characters.slugToDisplay(profile['server_data']['2v2shuffle'][0].topRating.character);
+    }
+}
+
+async function formatProfile(profile, wbname, user_id, interaction) {
+    return new Promise(async (resolve, reject) => {
+        console.log("Executing search for " + wbname);
+        const top_1s = await getHighestRatedCharacter(user_id, "1v1");
+        const top_2s = await getHighestRatedCharacter(user_id, "2v2");
+
+        // Create an embed object
+        const embed = new EmbedBuilder()
+            .setColor('#0099ff')
+            .setTitle(`Player stats for ${wbname}`)
+            .setAuthor({name: "taetae"})
+            .setDescription('Here are the player stats:')
+            .addFields(
+                { name: '1v1', value: `Top char: ${top_1s}\nOverall rank: ${profile.OneVsOne.rank}\nElo: ${parseInt(profile.OneVsOne.score)}` },
+                { name: '2v2', value: `Top char: ${top_2s}\nOverall rank: ${profile.TwoVsTwo.rank}\nElo: ${parseInt(profile.TwoVsTwo.score)}` }
+            );
+
+// Send the embed object to a Discord channel
+
+
+
+        resolve(embed);
+    });
+}
 
 
 module.exports.getaccountdata = getaccountdata;
 module.exports.getidfromusername = getidfromusername;
 module.exports.getusernamefromid = getusernamefromid;
 module.exports.getUserLeaderboard = getUserLeaderboard;
+module.exports.getprofiledata = getprofiledata;
+module.exports.getHighestRatedCharacter = getHighestRatedCharacter;
+module.exports.formatProfile = formatProfile;
