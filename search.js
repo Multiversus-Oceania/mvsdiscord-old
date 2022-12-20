@@ -100,7 +100,6 @@ async function formatProfile(profile, wbname, user_id, interaction) {
             .setColor('#0099ff')
             .setTitle(`Player stats for ${wbname}`)
             .setAuthor({name: "taetae"})
-            .setDescription('Here are the player stats:')
             .addFields(
                 { name: '1v1', value: `Top character: ${top_1s}\nOverall rank: ${profile.OneVsOne.rank}\nElo: ${parseInt(profile.OneVsOne.score)}`, inline: true },
                 { name: '2v2', value: `Top character: ${top_2s}\nOverall rank: ${profile.TwoVsTwo.rank}\nElo: ${parseInt(profile.TwoVsTwo.score)}`, inline: true }
