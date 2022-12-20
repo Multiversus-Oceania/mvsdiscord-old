@@ -3,7 +3,6 @@ const Characters = require('./characters.js');
 const fs = require('fs');
 require('dotenv').config();
 const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
-const {getImagePathFromSlug} = require("./characters");
 
 async function getaccountdata(user_id) {
     return new Promise(async (resolve, reject) => {
@@ -96,8 +95,10 @@ async function formatProfile(profile, wbname, user_id, interaction) {
         console.log("Executing search for " + wbname);
         const top_1s = await getHighestRatedCharacter(user_id, "1v1");
         const top_2s = await getHighestRatedCharacter(user_id, "2v2");
-        const path1s = getImagePathFromSlug(top_1s);
-        const path2s = getImagePathFromSlug(top_2s);
+        const path1s = Characters.getImagePath(top_1s);
+        const file1s = new AttachmentBuilder(Characters.getImagePath(top_1s));
+        const path2s = Characters.getImagePath(top_2s);
+        const file2s = new AttachmentBuilder(Characters.getImagePath(top_2s));
         console.log(path1s);
         console.log(path2s);
         // Create an embed object
@@ -111,6 +112,7 @@ async function formatProfile(profile, wbname, user_id, interaction) {
             )
             .setImage(path1s)  // Set the image for the 1v1 character
             .setImage(path2s);  // Set the image for the 2v2 character
+        await interaction.editReply({ embeds: [embed], files: [file1s, file2s] });
         resolve(embed);
     });
 }

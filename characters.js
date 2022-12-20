@@ -49,7 +49,8 @@ function displayToSlug(name) {
     }
 }
 
-function getImagePathFromSlug(slug) {
+function getImagePath(character) {
+    slug = displayToSlug(character);
     for (const char in Characters) {
         if (Characters[char].slug === slug) {
             return Characters[char].imagepath;
@@ -59,4 +60,4 @@ function getImagePathFromSlug(slug) {
 module.exports.getCharacterFromSlug = getCharacterFromSlug;
 module.exports.slugToDisplay = slugToDisplay;
 module.exports.displayToSlug = displayToSlug;
-module.exports.getImagePathFromSlug = getImagePathFromSlug;
+module.exports.getImagePath = getImagePath;

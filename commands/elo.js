@@ -37,8 +37,8 @@ module.exports = {
                     user_id = user.warnerBrosId;
                     wbname = user.warnerBrosName;
                     profile = await getUserLeaderboard(user_id);
-                    const output = await formatProfile(profile, wbname, user_id, interaction);
-                    await interaction.editReply({ embeds: [output] });
+                    await formatProfile(profile, wbname, user_id, interaction);
+
                 } else {
                     // User has not registered their Warner Bros. in-game name
                     return interaction.editReply('You have not registered your Warner Bros. in-game name. Use the `/register` command to register your in-game name.');
