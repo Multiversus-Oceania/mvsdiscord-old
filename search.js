@@ -1,8 +1,9 @@
 const requestdata = require('./requestdata.js');
-const characters = require('./characters.js');
+const Characters = require('./characters.js');
 const fs = require('fs');
 require('dotenv').config();
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
+const {getImagePathFromSlug} = require("./characters");
 
 async function getaccountdata(user_id) {
     return new Promise(async (resolve, reject) => {
@@ -82,11 +83,11 @@ async function getHighestRatedCharacter(user_id, gamemode) {
     const profile = await getprofiledata(user_id);
     if (gamemode === "1v1") {
         console.log(profile['server_data']['1v1shuffle'][0].topRating.character);
-        return characters.slugToDisplay(profile['server_data']['1v1shuffle'][0].topRating.character);
+        return Characters.slugToDisplay(profile['server_data']['1v1shuffle'][0].topRating.character);
     }
     else if (gamemode === "2v2") {
         console.log(profile['server_data']['2v2shuffle'][0].topRating.character);
-        return characters.slugToDisplay(profile['server_data']['2v2shuffle'][0].topRating.character);
+        return Characters.slugToDisplay(profile['server_data']['2v2shuffle'][0].topRating.character);
     }
 }
 
@@ -95,7 +96,10 @@ async function formatProfile(profile, wbname, user_id, interaction) {
         console.log("Executing search for " + wbname);
         const top_1s = await getHighestRatedCharacter(user_id, "1v1");
         const top_2s = await getHighestRatedCharacter(user_id, "2v2");
-
+        const path1s = getImagePathFromSlug(top_1s);
+        const path2s = getImagePathFromSlug(top_2s);
+        console.log(path1s);
+        console.log(path2s);
         // Create an embed object
         const embed = new EmbedBuilder()
             .setColor('#0099ff')
@@ -104,11 +108,12 @@ async function formatProfile(profile, wbname, user_id, interaction) {
             .addFields(
                 { name: '1v1', value: `Top character: ${top_1s}\nOverall rank: ${profile.OneVsOne.rank}\nElo: ${parseInt(profile.OneVsOne.score)}`, inline: true },
                 { name: '2v2', value: `Top character: ${top_2s}\nOverall rank: ${profile.TwoVsTwo.rank}\nElo: ${parseInt(profile.TwoVsTwo.score)}`, inline: true }
-            );
+            )
+            .setImage(path1s)  // Set the image for the 1v1 character
+            .setImage(path2s);  // Set the image for the 2v2 character
         resolve(embed);
     });
 }
-
 
 module.exports.getaccountdata = getaccountdata;
 module.exports.getidfromusername = getidfromusername;

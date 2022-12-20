@@ -10,6 +10,7 @@ env:
   clientId: ${{ secrets.CLIENTID }}
   guildId: ${{ secrets.GUILDID }}
   userspath: "/data/users.json"
+  assetspath: "/data/assets/"
   
 jobs:
   deploy:
@@ -23,5 +24,6 @@ jobs:
         - run: echo "CLIENTID=$clientId" >> .env
         - run: echo "GUILDID=$guildId" >> .env
         - run: echo "userspath=$userspath" >> .env
+          run: echo "assetspath=$assetspath" >> .env
         - run: flyctl wireguard websockets enable
         - run: flyctl deploy --remote-only
