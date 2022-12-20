@@ -95,22 +95,18 @@ async function formatProfile(profile, wbname, user_id, interaction) {
         console.log("Executing search for " + wbname);
         const top_1s = await getHighestRatedCharacter(user_id, "1v1");
         const top_2s = await getHighestRatedCharacter(user_id, "2v2");
-        const path1s = Characters.getImagePath(top_1s);
-        const file1s = new AttachmentBuilder(Characters.getImagePath(top_1s));
-        const path2s = Characters.getImagePath(top_2s);
-        const file2s = new AttachmentBuilder(Characters.getImagePath(top_2s));
-        console.log(path1s);
-        console.log(path2s);
+        const emote1s = Characters.getEmote(top_1s);
+        const emote2s = Characters.getEmote(top_2s);
         // Create an embed object
         const embed = new EmbedBuilder()
             .setColor('#0099ff')
             .setTitle(`Player stats for ${wbname}`)
             .setAuthor({name: "taetae"})
             .addFields(
-                { name: '1v1', value: `Top character: ${top_1s}\nOverall rank: ${profile.OneVsOne.rank}\nElo: ${parseInt(profile.OneVsOne.score)}`, inline: true },
-                { name: '2v2', value: `Top character: ${top_2s}\nOverall rank: ${profile.TwoVsTwo.rank}\nElo: ${parseInt(profile.TwoVsTwo.score)}`, inline: true }
+                { name: `1v1 ${emote1s}`, value: `Top character: ${top_1s}\nOverall rank: ${profile.OneVsOne.rank}\nElo: ${parseInt(profile.OneVsOne.score)}`, inline: true },
+                { name: `2v2 ${emote2s}`, value: `Top character: ${top_2s}\nOverall rank: ${profile.TwoVsTwo.rank}\nElo: ${parseInt(profile.TwoVsTwo.score)}`, inline: true }
             )
-        await interaction.editReply({ embeds: [embed], files: [file1s, file2s] });
+        await interaction.editReply({ embeds: [embed]});
         resolve(embed);
     });
 }
