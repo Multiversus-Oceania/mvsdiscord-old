@@ -1,8 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { getidfromusername, getusernamefromid, getUserLeaderboard } = require('../search.js');
-const { requestData } = require('../requestdata.js');
 const fs = require('fs');
-
+require('dotenv').config();
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('elo')

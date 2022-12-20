@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { User, addUserToJSONFile } = require('../users.js');
 const { getidfromusername, getusernamefromid } = require('../search.js');
-
+require('dotenv').config();
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('register')
