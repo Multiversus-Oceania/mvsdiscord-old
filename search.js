@@ -81,9 +81,11 @@ async function getUserLeaderboard(id, gamemode="both") {
 async function getHighestRatedCharacter(user_id, gamemode) {
     const profile = await getprofiledata(user_id);
     if (gamemode === "1v1") {
+        console.log(profile['server_data']['1v1shuffle'][0].topRating.character);
         return characters.slugToDisplay(profile['server_data']['1v1shuffle'][0].topRating.character);
     }
     else if (gamemode === "2v2") {
+        console.log(profile['server_data']['2v2shuffle'][0].topRating.character);
         return characters.slugToDisplay(profile['server_data']['2v2shuffle'][0].topRating.character);
     }
 }
