@@ -20,7 +20,7 @@ const Characters = {
     Stripe: { name: "Stripe", slug: "character_C023B" },
     Marvin: { name: "Marvin", slug: "character_C018" },
     BlackAdam: { name: "Black Adam", slug: "character_C021" },
-    Morty: { name: "Morty", slug: "character_C019" },
+    Morty: { name: "Morty", slug: "character_c019" },
     Gizmo: { name: "Gizmo", slug: "character_C023A" },
 };
 
