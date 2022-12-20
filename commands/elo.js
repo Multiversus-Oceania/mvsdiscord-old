@@ -38,11 +38,11 @@ module.exports = {
                     const user_id = user.warnerBrosId;
                     const username = user.warnerBrosName;
                     const profile = await getUserLeaderboard(user_id);
-                    console.log("1v1 rank: " + profile.OneVsOne.rank + " 1v1 elo: " + parseInt(profile.OneVsOne.score));
-                    console.log("2v2 rank: " + profile.TwoVsTwo.rank + " 2v2 elo: " + parseInt(profile.TwoVsTwo.score));
+                    console.log("1v1 rank: " + profile.OneVsOne.rank + " elo: " + parseInt(profile.OneVsOne.score));
+                    console.log("2v2 rank: " + profile.TwoVsTwo.rank + " elo: " + parseInt(profile.TwoVsTwo.score));
                     const string = "user: " + username;
-                    const string1 = "1v1 rank: " + profile.OneVsOne.rank + " 1v1 elo: " + parseInt(profile.OneVsOne.score);
-                    const string2 = "2v2 rank: " + profile.TwoVsTwo.rank + " 2v2 elo: " + parseInt(profile.TwoVsTwo.score);
+                    const string1 = "1v1 rank: " + profile.OneVsOne.rank + " elo: " + parseInt(profile.OneVsOne.score);
+                    const string2 = "2v2 rank: " + profile.TwoVsTwo.rank + " elo: " + parseInt(profile.TwoVsTwo.score);
                     const output = string + "\n" + string1 + "\n" + string2;
                     return interaction.editReply(output);
                 } else {
