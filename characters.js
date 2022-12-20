@@ -16,7 +16,7 @@ const Characters = {
     Velma: { name: "Velma", slug: "character_velma" },
     IronGiant: { name: "Iron Giant", slug: "character_C017" },
     LebronJames: { name: "Lebron James", slug: "character_c16" },
-    Rick: { name: "Rick", slug: "character_C020" },
+    RickSanchez: { name: "Rick Sanchez", slug: "character_C020" },
     Stripe: { name: "Stripe", slug: "character_C023B" },
     Marvin: { name: "Marvin", slug: "character_C018" },
     BlackAdam: { name: "Black Adam", slug: "character_C021" },
