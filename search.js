@@ -19,7 +19,7 @@ async function getprofiledata(user_id) {
 }
 async function getidfromusername(user) {
     return new Promise(async (resolve, reject) => {
-        search = await mvs_client.profiles.search(user);
+        search = await mvs_client.profiles.search(user, limit = 99);
         const searchlength = search.results.length;
         if (searchlength === 1) {
             const user_id = search.results[0].result.account_id;
@@ -29,9 +29,8 @@ async function getidfromusername(user) {
             for (i = 0; i < searchlength; i++) {
                 const user_id = search.results[i].result.account_id
                 const account_data = await getaccountdata(user_id);
-                console.log(account_data.identity.alternate.wb_network[0]);
                 const username = account_data.identity.alternate.wb_network[0].username;
-                if (username.toLowerCase() === user.toLowerCase()) {
+                if (username && username.toLowerCase() === user.toLowerCase()) {
                     resolve(user_id);
                 }
             }
