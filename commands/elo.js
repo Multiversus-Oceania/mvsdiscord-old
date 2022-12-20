@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { getidfromusername, getusernamefromid } = require('../search.js');
-
+const { getidfromusername, getusernamefromid, getUserLeaderboard } = require('../search.js');
 const { requestData } = require('../requestdata.js');
 const fs = require('fs');
 
@@ -14,38 +13,38 @@ module.exports = {
         let username;
         const arg1 = interaction.options.getString('user') ?? 'No user provided';
         if (arg1 !== 'No user provided') {
-            username = interaction.options.getString('user');
+            const username = interaction.options.getString('user');
             const user_id = await getidfromusername(username);
             if (user_id === 'Couldn\'t find user') {
                 await interaction.editReply('Couldn\'t find user');
                 return;
             }
             const wbname = await getusernamefromid(user_id);
-            const profile1s = await mvs_client.leaderboards.fetchProfile(user_id, '1v1');
-            const profile2s = await mvs_client.leaderboards.fetchProfile(user_id, '2v2');
-            console.log("profile1s.keys: " + profile1s.keys);
-            console.log("profile2s.keys: " + profile2s.keys);
-            const score1v1 = await requestData("/leaderboards/1v1/score-and-rank/" + user_id, mvs_client.accessToken);
-            const score2v2 = await requestData("/leaderboards/2v2/score-and-rank/" + user_id, mvs_client.accessToken);
-            console.log(score1v1.score);
-            console.log(score2v2.score);
-            console.log("1v1: " + score1v1.score + " 2v2: " + score2v2.score);
-            const string = "user: " + wbname + " 1v1 elo: " + parseInt(score1v1.score) + " 2v2 elo: " + parseInt(score2v2.score);
-            await interaction.editReply(string);
+            const profile = await getUserLeaderboard(user_id);
+            console.log("1v1 rank: " + profile.OneVsOne.rank + " 1v1 elo: " + parseInt(profile.OneVsOne.score));
+            console.log("2v2 rank: " + profile.TwoVsTwo.rank + " 2v2 elo: " + parseInt(profile.TwoVsTwo.score));
+            const string = "user: " + wbname;
+            const string1 = "1v1 rank: " + profile.OneVsOne.rank + " 1v1 elo: " + parseInt(profile.OneVsOne.score);
+            const string2 = "2v2 rank: " + profile.TwoVsTwo.rank + " 2v2 elo: " + parseInt(profile.TwoVsTwo.score);
+            const output = string + "\n" + string1 + "\n" + string2;
+            await interaction.editReply(output);
         } else {
             // Check if the user has already registered their Warner Bros. in-game name
-            fs.readFile('/data/users.json', async (err, data) => {
+            fs.readFile(process.env.userspath, async (err, data) => {
                 if (err) throw err;
                 const users = JSON.parse(data);
                 const user = users[interaction.member.id];
                 if (user) {
                     const user_id = user.warnerBrosId;
                     const username = user.warnerBrosName;
-                    const score1v1 = await requestData("/leaderboards/1v1/score-and-rank/" + user_id, mvs_client.accessToken);
-                    const score2v2 = await requestData("/leaderboards/2v2/score-and-rank/" + user_id, mvs_client.accessToken);
-                    console.log("1v1: " + score1v1.score + " 2v2: " + score2v2.score);
-                    const string = "user: " + username + " 1v1 elo: " + parseInt(score1v1.score) + " 2v2 elo: " + parseInt(score2v2.score);
-                    return interaction.editReply(string);
+                    const profile = await getUserLeaderboard(user_id);
+                    console.log("1v1 rank: " + profile.OneVsOne.rank + " 1v1 elo: " + parseInt(profile.OneVsOne.score));
+                    console.log("2v2 rank: " + profile.TwoVsTwo.rank + " 2v2 elo: " + parseInt(profile.TwoVsTwo.score));
+                    const string = "user: " + username;
+                    const string1 = "1v1 rank: " + profile.OneVsOne.rank + " 1v1 elo: " + parseInt(profile.OneVsOne.score);
+                    const string2 = "2v2 rank: " + profile.TwoVsTwo.rank + " 2v2 elo: " + parseInt(profile.TwoVsTwo.score);
+                    const output = string + "\n" + string1 + "\n" + string2;
+                    return interaction.editReply(output);
                 } else {
                     // User has not registered their Warner Bros. in-game name
                     return interaction.editReply('You have not registered your Warner Bros. in-game name. Use the `/register` command to register your in-game name.');

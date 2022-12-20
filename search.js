@@ -47,6 +47,29 @@ async function getusernamefromid(user_id, platform = 'wb_network') {
     });
 }
 
+async function getUserLeaderboard(id, gamemode="both") {
+  return new Promise(async (resolve, reject) => {
+    if (gamemode === "both") {
+      const profile1v1 = await mvs_client.leaderboards.fetchProfile(id, "1v1");
+      const profile2v2 = await mvs_client.leaderboards.fetchProfile(id, "2v2");
+      resolve({ OneVsOne : {rank: profile1v1.rank, score: profile1v1.score}, TwoVsTwo: {rank: profile2v2.rank, score: profile2v2.score} });
+    }
+    else {
+      const profile = await mvs_client.leaderboards.fetchProfile(id, gamemode);
+      if (gamemode === "1v1") {
+        resolve({ OneVsOne: {rank: profile.rank, score: profile.score} });
+      }
+      else if (gamemode === "2v2") {
+        resolve({ TwoVsTwo: {rank: profile.rank, score: profile.score}});
+    }
+  }
+  reject("Something went wrong");
+});
+}
+
+
+
 module.exports.getaccountdata = getaccountdata;
 module.exports.getidfromusername = getidfromusername;
 module.exports.getusernamefromid = getusernamefromid;
+module.exports.getUserLeaderboard = getUserLeaderboard;
