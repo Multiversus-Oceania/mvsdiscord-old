@@ -9,7 +9,7 @@ env:
   multiversus_token: ${{ secrets.MULTIVERSUS_TOKEN }}
   clientId: ${{ secrets.CLIENTID }}
   guildId: ${{ secrets.GUILDID }}
-  userspath: /data/users.json
+  userspath: "/data/users.json"
   
 jobs:
   deploy:
