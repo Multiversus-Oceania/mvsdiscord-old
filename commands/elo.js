@@ -23,8 +23,7 @@ module.exports = {
             }
             wbname = await getusernamefromid(user_id);
             profile = await getUserLeaderboard(user_id);
-            const output = await formatProfile(profile, wbname, user_id, interaction);
-            await interaction.editReply({ embeds: [output] });
+            await formatProfile(profile, wbname, user_id, interaction);
         }
         // User not provided
         else {
