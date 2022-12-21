@@ -3,6 +3,8 @@ const Search = require('../mvs/search.js')
 const fs = require("fs");
 const Characters = require("../mvs/characters");
 const Discord = require("discord.js");
+const Maps = require("../mvs/maps");
+const Emotes = Maps.Emotes;
 require('dotenv').config();
 module.exports = {
     data: new SlashCommandBuilder()
@@ -50,15 +52,19 @@ module.exports = {
             teamPlayers[teamIndex].push({ playerName, playerRating, playerRatingChange, character, characterSlug, characterRating, ratingChange, damageDone, ringouts, deaths });
         }
 
+        const ringoutLeader = teamPlayers[0].concat(teamPlayers[1]).sort((a, b) => b.ringouts - a.ringouts)[0] || { playerName: "None" };
         // Create a new Discord embed
         const embed = new Discord.EmbedBuilder()
             .setColor("#0099ff")
-            .setTitle(`Last Match: ${map} - ${mode}`)
+            .setTitle(`Last Match: ${map} - ${mode} ${Emotes[mode]}`)
             .addFields(
-                { name: "Match Results", value: `${winners === 0 ? "Blue Team" : "Red Team"} won ${team_scores[0]} - ${team_scores[1]}`},
-                { name: "Blue Team", value: teamPlayers[0].map(p => `**${p.playerName}** ${p.character}\nPlayer Rating: ${parseInt(p.playerRating, 10)}${p.playerRatingChange.toFixed(1) > 0 ? " (+" : p.playerRatingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.playerRatingChange.toFixed(1))})\nCharacter Rating: ${parseInt(p.characterRating, 10)}${p.ratingChange.toFixed(1) > 0 ? " (+" : p.ratingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.ratingChange.toFixed(1))})\nDamage Done: ${p.damageDone}\nRingouts: ${p.ringouts}\nDeaths: ${p.deaths}`).join("\n\n"), inline: true, color: 0x0000ff },
-                { name: "Red Team", value: teamPlayers[1].map(p => `**${p.playerName}** ${p.character}\nPlayer Rating: ${parseInt(p.playerRating, 10)}${p.playerRatingChange.toFixed(1) > 0 ? " (+" : p.playerRatingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.playerRatingChange.toFixed(1))})\nCharacter Rating: ${parseInt(p.characterRating, 10)}${p.ratingChange.toFixed(1) > 0 ? " (+" : p.ratingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.ratingChange.toFixed(1))})\nDamage Done: ${p.damageDone}\nRingouts: ${p.ringouts}\nDeaths: ${p.deaths}`).join("\n\n"), inline: true, color: 0xff0000 }
-            );
+                { name: "Match Results", value: `${winners === 0 ? `${Emotes["Win"]} Blue Team` : `${Emotes["Win"]} Red Team`} won ${team_scores[0]} - ${team_scores[1]}`},
+                { name: "Blue Team", value: teamPlayers[0].map(p => { let value = `${p.playerName} ${p.character}\nPlayer Rating: ${parseInt(p.playerRating, 10)}${p.playerRatingChange.toFixed(1) > 0 ? " (+" : p.playerRatingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.playerRatingChange.toFixed(1))})\nCharacter Rating: ${parseInt(p.characterRating, 10)}${p.ratingChange.toFixed(1) > 0 ? " (+" : p.ratingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.ratingChange.toFixed(1))})\nDamage Done: ${p.damageDone}\nRingouts: ${p.ringouts}\nDeaths: ${p.deaths}`; if (p === ringoutLeader) value = `${Emotes["RingoutLeader"]} ${value}`; if (p.damageDone >= 400) value = `${Emotes["Damage"]} ${value}`;
+                        return value;
+                    }).join("\n\n"), inline: true },
+                { name: "Red Team", value: teamPlayers[1].map(p => { let value = `${p.playerName} ${p.character}\nPlayer Rating: ${parseInt(p.playerRating, 10)}${p.playerRatingChange.toFixed(1) > 0 ? " (+" : p.playerRatingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.playerRatingChange.toFixed(1))})\nCharacter Rating: ${parseInt(p.characterRating, 10)}${p.ratingChange.toFixed(1) > 0 ? " (+" : p.ratingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.ratingChange.toFixed(1))})\nDamage Done: ${p.damageDone}\nRingouts: ${p.ringouts}\nDeaths: ${p.deaths}`; if (p === ringoutLeader) value = `${Emotes["RingoutLeader"]} ${value}`; if (p.damageDone >= 400) value = `${Emotes["Damage"]} ${value}`;
+                        return value;
+                    }).join("\n\n"), inline: true });
 
 
         // Reply to the user to confirm that their username has been registered
