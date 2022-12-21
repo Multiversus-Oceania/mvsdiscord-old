@@ -10,7 +10,6 @@ module.exports = {
     .addStringOption(option => option.setName('user').setDescription('WB Username').setRequired(false)),
     execute: async function (interaction) {
         await interaction.deferReply();
-        let username;
         const arg1 = interaction.options.getString('user') ?? 'No user provided';
         let wbname, user_id, profile;
         // User is provided
