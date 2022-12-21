@@ -59,14 +59,14 @@ module.exports = {
         const embed = new Discord.EmbedBuilder()
             .setColor("#0099ff")
             .setTitle(`Last Match: ${map} - ${mode} ${Emotes[mode]}`)
-            .addFields({ name: "Match Results", value: `${winners === 0 ? `${Emotes["Win"]} Blue Team` : `${Emotes["Win"]} Red Team`} won ${team_scores[0]} - ${team_scores[1]}`}, { name: "Blue Team", value: teamPlayers[0].map(p => { let value = `${p.playerName} ${p.character}
+            .addFields({ name: "Match Results", value: `${winners === 0 ? `Blue Team` : `Red Team`} won ${team_scores[0]} - ${team_scores[1]}`}, { name: `${winners === 0 ? `Blue Team ${Emotes["Win"]}` : `Blue Team`}`, value: teamPlayers[0].map(p => { let value = `${p.playerName} ${p.character}
 Player Rating: ${parseInt(p.playerRating, 10)}${p.playerRatingChange.toFixed(1) > 0 ? " (+" : p.playerRatingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.playerRatingChange.toFixed(1))})
 Character Rating: ${parseInt(p.characterRating, 10)}${p.ratingChange.toFixed(1) > 0 ? " (+" : p.ratingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.ratingChange.toFixed(1))})
 Damage Done: ${p.damageDone}
 Ringouts: ${p.ringouts}
 Deaths: ${p.deaths}`; if (p === ringoutLeader) value = `${Emotes["RingoutLeader"]} ${value}`; if (p.damageDone >= 400) value = `${Emotes["Damage"]} ${value}`;
                     return value;
-                }).join("\n\n"), inline: true }, { name: "Red Team", value: teamPlayers[1].map(p => { let value = `${p.playerName} ${p.character}
+                }).join("\n\n"), inline: true }, { name: `${winners === 1 ? `Red Team ${Emotes["Win"]}` : `Red Team`}`, value: teamPlayers[1].map(p => { let value = `${p.playerName} ${p.character}
 Player Rating: ${parseInt(p.playerRating, 10)}${p.playerRatingChange.toFixed(1) > 0 ? " (+" : p.playerRatingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.playerRatingChange.toFixed(1))})
 Character Rating: ${parseInt(p.characterRating, 10)}${p.ratingChange.toFixed(1) > 0 ? " (+" : p.ratingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.ratingChange.toFixed(1))})
 Damage Done: ${p.damageDone}
