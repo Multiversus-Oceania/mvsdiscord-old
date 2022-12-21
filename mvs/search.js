@@ -126,13 +126,13 @@ async function getLastCompletedMatch(matches, gamemode = "any") {
     return new Promise(async (resolve, reject) => {
         if (gamemode === "any") {
             for (i = 0; i < matches.length; i++) {
-                if (matches[i].state === "complete" && !matches[i].server_data.IsCustomMatch) {
+                if (matches[i].state === "complete") {
                     resolve(matches[i]);
                 }
             }
         } else {
             for (i = 0; i < matches.length; i++) {
-                if (matches[i].state === "complete" && matches[i].template.name === gamemode && !matches[i].server_data.IsCustomMatch) {
+                if (matches[i].state === "complete" && matches[i].template.name === gamemode) {
                     resolve(matches[i]);
                 }
             }
