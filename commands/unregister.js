@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { removeUserFromJSONFile } = require('../users.js');
+const { removeUserFromJSONFile } = require('../mvs/users.js');
 require('dotenv').config();
 module.exports = {
     data: new SlashCommandBuilder()

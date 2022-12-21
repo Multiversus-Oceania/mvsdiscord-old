@@ -10,7 +10,7 @@
 	const path = require('node:path');
 	const { Client, GatewayIntentBits, Collection } = require('discord.js');
 	const { Client: MVSClient } = require('multiversus.js');
-	const generatemvstoken = require('./generatemvstoken.js');
+	const generatemvstoken = require('./mvs/generatemvstoken.js');
 
 	app.get(["/", "/:name"], (req, res) => {
 		greeting = "<h1>Hello From Node on Fly!</h1>";
