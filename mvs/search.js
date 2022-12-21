@@ -116,9 +116,7 @@ async function getLastMatch(user_id, gamemode="any") {
         console.log(user_id);
         const matches = (await mvs_client.matches.fetchAll(user_id, limit = 1)).matches;
         const last_match = await getLastCompletedMatch(matches, gamemode);
-        const last_match_id = last_match.id;
-        const match = await mvs_client.matches.fetch(last_match_id);
-        resolve(match);
+        resolve(last_match);
     });
 }
 
@@ -127,14 +125,21 @@ async function getLastCompletedMatch(matches, gamemode = "any") {
         if (gamemode === "any") {
             for (i = 0; i < matches.length; i++) {
                 if (matches[i].state === "complete") {
-                    resolve(matches[i]);
+                    const match = await mvs_client.matches.fetch(matches[i].id);
+                    if (match.server_data.IsCustomMatch === false) {
+                        resolve(match);
+                    }
                 }
             }
         } else {
             for (i = 0; i < matches.length; i++) {
                 if (matches[i].state === "complete" && matches[i].template.name === gamemode) {
-                    resolve(matches[i]);
+                    const match = await mvs_client.matches.fetch(matches[i].id);
+                    if (match.server_data.IsCustomMatch === false) {
+                        resolve(match);
+                    }
                 }
+
             }
         }
     });
