@@ -9,3 +9,6 @@ config.json
 users.json
 test*
 commands/template.js
+*.env
+mvs.env
+test.env

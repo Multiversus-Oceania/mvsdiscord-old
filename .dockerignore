@@ -2,3 +2,5 @@ node_modules
 multiversustoken.txt
 token.txt
 commands/template.js
+*.env
+test.env
