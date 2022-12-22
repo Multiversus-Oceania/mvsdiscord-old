@@ -99,14 +99,17 @@ async function formatProfile(profile, wbname, user_id, interaction) {
         const top_2s = await getHighestRatedCharacter(user_id, "2v2");
         const emote1s = Characters.getEmote(top_1s);
         const emote2s = Characters.getEmote(top_2s);
+        const user_profile = await getProfileData(user_id);
+        const ranked_rating1 = user_profile.server_data["1v1_ranked"][1].rank.current_points;
+        const ranked_rating2 = user_profile.server_data["2v2_ranked"][1].rank.current_points;
         // Create an embed object
         const embed = new EmbedBuilder()
             .setColor('#0099ff')
             .setTitle(`Player stats for ${wbname}`)
             .setAuthor({name: "taetae"})
             .addFields(
-                { name: `1v1 ${emote1s}`, value: `Top character: ${top_1s}\nOverall rank: ${profile.OneVsOne.rank}\nElo: ${parseInt(profile.OneVsOne.score)}`, inline: true },
-                { name: `2v2 ${emote2s}`, value: `Top character: ${top_2s}\nOverall rank: ${profile.TwoVsTwo.rank}\nElo: ${parseInt(profile.TwoVsTwo.score)}`, inline: true }
+                { name: `**1v1** ${emote1s}`, value: `Ranked Rating: ${ranked_rating1}\nTop character: ${top_1s}\nOverall rank (Unranked): ${profile.OneVsOne.rank}\nElo (Unranked): ${parseInt(profile.OneVsOne.score)}`, inline: true },
+                { name: `**2v2** ${emote2s}`, value: `Ranked Rating: ${ranked_rating2}\nTop character: ${top_2s}\nOverall rank (Unranked): ${profile.TwoVsTwo.rank}\nElo (Unranked): ${parseInt(profile.TwoVsTwo.score)}`, inline: true }
             )
         await interaction.editReply({ embeds: [embed]});
         resolve(embed);
