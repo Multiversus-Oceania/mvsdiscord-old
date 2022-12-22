@@ -1,6 +1,6 @@
 const { REST, Routes } = require('discord.js');
 const fs = require('node:fs');
-require('dotenv').config();
+const path = require('path'); require('dotenv').config({ path: path.join(__dirname, 'mvs.env') });
 
 const commands = [];
 // Grab all the command files from the commands directory you created earlier
