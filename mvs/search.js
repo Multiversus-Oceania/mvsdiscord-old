@@ -136,7 +136,7 @@ async function getLastCompletedMatch(matches, gamemode = "any") {
             for (i = 0; i < matches.length; i++) {
                 if (matches[i].state === "complete") {
                     const match = await mvs_client.matches.fetch(matches[i].id);
-                    if (match.server_data.IsCustomMatch === false && !match.server_data.match_config.MutatorData) {
+                    if (match.server_data.IsCustomMatch === false && !match.server_data.match_config.MutatorData && match.server_data.match_config.QueueType !== "Ranked" ) {
                         resolve(match);
                     }
                 }
@@ -145,7 +145,7 @@ async function getLastCompletedMatch(matches, gamemode = "any") {
             for (i = 0; i < matches.length; i++) {
                 if (matches[i].state === "complete" && matches[i].template.name === gamemode) {
                     const match = await mvs_client.matches.fetch(matches[i].id);
-                    if (match.server_data.IsCustomMatch === false && !match.server_data.match_config.MutatorData) {
+                    if (match.server_data.IsCustomMatch === false && !match.server_data.match_config.MutatorData && match.server_data.match_config.QueueType !== "Ranked") {
                         resolve(match);
                     }
                 }
