@@ -301,7 +301,7 @@ async function getEmbedFromRankedMatch(interaction) {
 
         const teamIndex = players[i].TeamIndex;
         const playerName = players[i].Username;
-        const current_user_id = getidfromusername(playerName);
+        const current_user_id = await getidfromusername(playerName);
         const current_user_profile = await getProfileData(current_user_id);
         const characterSlug = players[i].CharacterSlug;
         const character = Characters.getEmote(Characters.slugToDisplay(characterSlug));
