@@ -12,3 +12,4 @@ commands/template.js
 *.env
 mvs.env
 test.env
+assets/
