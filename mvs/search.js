@@ -1,9 +1,11 @@
 const requestdata = require('./requestdata.js');
-const Characters = require('./characters.js');
-const fs = require('fs');
 require('dotenv').config();
 const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
-
+const fs = require("fs");
+const Characters = require("../mvs/characters");
+const Discord = require("discord.js");
+const Maps = require("./maps");
+const Emotes = Maps.Emotes;
 async function getAccountData(user_id) {
     return new Promise(async (resolve, reject) => {
         const account_data = await requestdata.requestData("/accounts/" + user_id, mvs_client.accessToken);
@@ -120,6 +122,14 @@ async function getLastMatch(user_id, gamemode="any") {
     });
 }
 
+async function getLastRankedMatch(user_id, gamemode="any") {
+    return new Promise(async (resolve, reject) => {
+        console.log(user_id);
+        const matches = (await mvs_client.matches.fetchAll(user_id, limit = 1)).matches;
+        const last_match = await getLastCompletedRankedMatch(matches, gamemode);
+        resolve(last_match);
+    });
+}
 async function getLastCompletedMatch(matches, gamemode = "any") {
     return new Promise(async (resolve, reject) => {
         if (gamemode === "any") {
@@ -144,6 +154,33 @@ async function getLastCompletedMatch(matches, gamemode = "any") {
         }
     });
 }
+
+async function getLastCompletedRankedMatch(matches, gamemode = "any") {
+    return new Promise(async (resolve, reject) => {
+        if (gamemode === "any") {
+            for (i = 0; i < matches.length; i++) {
+                if (matches[i].state === "complete") {
+                    const match = await mvs_client.matches.fetch(matches[i].id);
+                    if (match.server_data.IsCustomMatch === false && !match.server_data.match_config.MutatorData && match.server_data.match_config.QueueType === "Ranked") {
+                        resolve(match);
+                    }
+                }
+            }
+        } else {
+            for (i = 0; i < matches.length; i++) {
+                if (matches[i].state === "complete" && matches[i].template.name === gamemode && match.server_data.match_config.QueueType === "Ranked") {
+                    const match = await mvs_client.matches.fetch(matches[i].id);
+                    if (match.server_data.IsCustomMatch === false && !match.server_data.match_config.MutatorData) {
+                        resolve(match);
+                    }
+                }
+
+            }
+        }
+    });
+}
+
+
 
 async function getUserInfo(interaction) {
     return new Promise(async (resolve, reject) => {
@@ -174,7 +211,123 @@ async function getUserInfo(interaction) {
     });
 }
 
+async function getEmbedFromCasualMatch(interaction) {
+    const user_info = await getUserInfo(interaction);
+    const user_id = user_info.user_id;
+    const game_mode = interaction.options.getString('gamemode') ?? 'any';
+    // Retrieve the last match
+    const last_match = await getLastMatch(user_id, game_mode);
+    // Get information about the last match
+    const server_data = last_match.server_data;
+    const map = server_data.MapName;
+    const players = server_data.PlayerData;
+    const character_rating_changes = last_match.data.ratingUpdates.player_rating_changes;
+    const player_rating_changes = last_match.data.ratingUpdates.general_rating_changes;
+    const winners = server_data.WinningTeamId;
+    const mode = last_match.template.name;
+    const team_scores = server_data.TeamScores;
 
+
+    // Create an array to hold the player information for each team
+    const teamPlayers = [[], []];
+
+    // Organize the player information by team
+    for (let i = 0; i < players.length; i++) {
+        const teamIndex = players[i].TeamIndex;
+        const playerName = players[i].Username;
+        const characterSlug = players[i].CharacterSlug;
+        const character = Characters.getEmote(Characters.slugToDisplay(characterSlug));
+        const damageDone = players[i].DamageDone;
+        const ringouts = players[i].Ringouts;
+        const deaths = players[i].Deaths;
+        const ratingChange = character_rating_changes[i].post_match_rating.mean - character_rating_changes[i].pre_match_rating.mean;
+        const playerRatingChange = player_rating_changes[i].post_match_rating.mean - player_rating_changes[i].pre_match_rating.mean;
+        const characterRating = character_rating_changes[i].post_match_rating.mean;
+        const playerRating = player_rating_changes[i].post_match_rating.mean;
+        teamPlayers[teamIndex].push({ playerName, playerRating, playerRatingChange, character, characterSlug, characterRating, ratingChange, damageDone, ringouts, deaths });
+    }
+
+    const ringoutLeader = teamPlayers[0].concat(teamPlayers[1]).sort((a, b) => b.ringouts - a.ringouts)[0] || { playerName: "None" };
+    // Create a new Discord embed
+    const embed = new Discord.EmbedBuilder()
+        .setColor("#0099ff")
+        .setTitle(`Last Match (Unranked) : ${map} - ${mode} ${Emotes[mode]}`)
+        .addFields({ name: "Match Results", value: `${winners === 0 ? `Blue Team` : `Red Team`} won ${team_scores[0]} - ${team_scores[1]}`}, { name: `${winners === 0 ? `Blue Team ${Emotes["Win"]}` : `Blue Team`}`, value: teamPlayers[0].map(p => { let value = `${p.playerName} ${p.character}
+Player Rating: ${parseInt(p.playerRating, 10)}${p.playerRatingChange.toFixed(1) > 0 ? " (+" : p.playerRatingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.playerRatingChange.toFixed(1))})
+Character Rating: ${parseInt(p.characterRating, 10)}${p.ratingChange.toFixed(1) > 0 ? " (+" : p.ratingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.ratingChange.toFixed(1))})
+Damage Done: ${p.damageDone}
+Ringouts: ${p.ringouts}
+Deaths: ${p.deaths}`; if (p === ringoutLeader) value = `${Emotes["RingoutLeader"]} ${value}`; if (p.damageDone >= 400) value = `${Emotes["Damage"]} ${value}`;
+                return value;
+            }).join("\n\n"), inline: true }, { name: `${winners === 1 ? `Red Team ${Emotes["Win"]}` : `Red Team`}`, value: teamPlayers[1].map(p => { let value = `${p.playerName} ${p.character}
+Player Rating: ${parseInt(p.playerRating, 10)}${p.playerRatingChange.toFixed(1) > 0 ? " (+" : p.playerRatingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.playerRatingChange.toFixed(1))})
+Character Rating: ${parseInt(p.characterRating, 10)}${p.ratingChange.toFixed(1) > 0 ? " (+" : p.ratingChange.toFixed(1) < 0 ? " (-" : ""}${Math.abs(p.ratingChange.toFixed(1))})
+Damage Done: ${p.damageDone}
+Ringouts: ${p.ringouts}
+Deaths: ${p.deaths}`; if (p === ringoutLeader) value = `${Emotes["RingoutLeader"]} ${value}`; if (p.damageDone >= 400) value = `${Emotes["Damage"]} ${value}`;
+                return value;
+            }).join("\n\n"), inline: true });
+
+    return embed;
+}
+
+async function getEmbedFromRankedMatch(interaction) {
+    const user_info = await getUserInfo(interaction);
+    const user_id = user_info.user_id;
+
+    const game_mode = interaction.options.getString('gamemode') ?? 'any';
+    // Retrieve the last match
+    const last_match = await getLastRankedMatch(user_id, game_mode);
+    // Get information about the last match
+    const server_data = last_match.server_data;
+    const map = server_data.MapName;
+    const players = server_data.PlayerData;
+    const winners = server_data.WinningTeamId;
+    const mode = last_match.template.name;
+    const gamemode_string = mode.concat('_ranked');
+    const team_scores = server_data.TeamScores;
+
+
+
+    // Create an array to hold the player information for each team
+    const teamPlayers = [[], []];
+
+    // Organize the player information by team
+    for (let i = 0; i < players.length; i++) {
+        const user_profile = await getProfileData(user_id);
+        const teamIndex = players[i].TeamIndex;
+        const playerName = players[i].Username;
+        const characterSlug = players[i].CharacterSlug;
+        const character = Characters.getEmote(Characters.slugToDisplay(characterSlug));
+        const damageDone = players[i].DamageDone;
+        const ringouts = players[i].Ringouts;
+        const deaths = players[i].Deaths;
+        const ranked_rating = user_profile.server_data[gamemode_string][1].rank.current_points;
+
+        teamPlayers[teamIndex].push({ playerName, ranked_rating, character, characterSlug, damageDone, ringouts, deaths });
+    }
+
+    const ringoutLeader = teamPlayers[0].concat(teamPlayers[1]).sort((a, b) => b.ringouts - a.ringouts)[0] || { playerName: "None" };
+    // Create a new Discord embed
+    const embed = new Discord.EmbedBuilder()
+        .setColor("#0099ff")
+        .setTitle(`Last Match (Ranked): ${map} - ${mode} ${Emotes[mode]}`)
+        .addFields({ name: "Match Results", value: `${winners === 0 ? `Blue Team` : `Red Team`} won ${team_scores[0]} - ${team_scores[1]}`}, { name: `${winners === 0 ? `Blue Team ${Emotes["Win"]}` : `Blue Team`}`, value: teamPlayers[0].map(p => { let value = `${p.playerName} ${p.character}
+Updated Ranked Rating: ${parseInt(p.ranked_rating, 10)}
+Damage Done: ${p.damageDone}
+Ringouts: ${p.ringouts}
+Deaths: ${p.deaths}`; if (p === ringoutLeader) value = `${Emotes["RingoutLeader"]} ${value}`; if (p.damageDone >= 400) value = `${Emotes["Damage"]} ${value}`;
+                return value;
+            }).join("\n\n"), inline: true }, { name: `${winners === 1 ? `Red Team ${Emotes["Win"]}` : `Red Team`}`, value: teamPlayers[1].map(p => { let value = `${p.playerName} ${p.character}
+Updated Ranked Rating: ${parseInt(p.ranked_rating, 10)}
+Damage Done: ${p.damageDone}
+Ringouts: ${p.ringouts}
+Deaths: ${p.deaths}`; if (p === ringoutLeader) value = `${Emotes["RingoutLeader"]} ${value}`; if (p.damageDone >= 400) value = `${Emotes["Damage"]} ${value}`;
+                return value;
+            }).join("\n\n"), inline: true });
+
+    return embed;
+}
 
 
 
@@ -189,3 +342,6 @@ module.exports.getHighestRatedCharacter = getHighestRatedCharacter;
 module.exports.formatProfile = formatProfile;
 module.exports.getLastMatch = getLastMatch;
 module.exports.getUserInfo = getUserInfo;
+module.exports.getEmbedFromCasualMatch = getEmbedFromCasualMatch;
+module.exports.getLastRankedMatch = getLastRankedMatch;
+module.exports.getEmbedFromRankedMatch = getEmbedFromRankedMatch;
