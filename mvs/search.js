@@ -297,15 +297,18 @@ async function getEmbedFromRankedMatch(interaction) {
 
     // Organize the player information by team
     for (let i = 0; i < players.length; i++) {
-        const user_profile = await getProfileData(user_id);
+
+
         const teamIndex = players[i].TeamIndex;
         const playerName = players[i].Username;
+        const current_user_id = getidfromusername(playerName);
+        const current_user_profile = await getProfileData(current_user_id);
         const characterSlug = players[i].CharacterSlug;
         const character = Characters.getEmote(Characters.slugToDisplay(characterSlug));
         const damageDone = players[i].DamageDone;
         const ringouts = players[i].Ringouts;
         const deaths = players[i].Deaths;
-        const ranked_rating = user_profile.server_data[gamemode_string][1].rank.current_points;
+        const ranked_rating = current_user_profile.server_data[gamemode_string][1].rank.current_points;
 
         teamPlayers[teamIndex].push({ playerName, ranked_rating, character, characterSlug, damageDone, ringouts, deaths });
     }
