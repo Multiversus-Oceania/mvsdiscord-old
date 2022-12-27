@@ -118,10 +118,14 @@ async function formatProfile(profile, wbname, user_id, interaction) {
 
 async function getLastMatch(user_id, gamemode="any") {
     return new Promise(async (resolve, reject) => {
-        console.log(user_id);
         const matches = (await mvs_client.matches.fetchAll(user_id, limit = 1)).matches;
-        const last_match = await getLastCompletedMatch(matches, gamemode);
-        resolve(last_match);
+        try {
+            const last_match = await getLastCompletedMatch(matches, gamemode);
+            resolve(last_match);
+        } catch (error) {
+            console.log(error);
+            reject("No unrated matches found, try playing a casual match");
+        }
     });
 }
 
@@ -129,8 +133,14 @@ async function getLastRankedMatch(user_id, gamemode="any") {
     return new Promise(async (resolve, reject) => {
         console.log(user_id);
         const matches = (await mvs_client.matches.fetchAll(user_id, limit = 1)).matches;
-        const last_match = await getLastCompletedRankedMatch(matches, gamemode);
-        resolve(last_match);
+        try {
+           const last_match = await getLastCompletedRankedMatch(matches, gamemode);
+            resolve(last_match);
+        } catch (error) {
+            console.log(error);
+            reject("No ranked matches found, try playing a ranked match");
+        }
+
     });
 }
 async function getLastCompletedMatch(matches, gamemode = "any") {
@@ -155,6 +165,7 @@ async function getLastCompletedMatch(matches, gamemode = "any") {
 
             }
         }
+        reject("No ranked matches found");
     });
 }
 
@@ -180,6 +191,7 @@ async function getLastCompletedRankedMatch(matches, gamemode = "any") {
 
             }
         }
+    reject("No ranked matches found");
     });
 }
 
@@ -219,7 +231,14 @@ async function getEmbedFromCasualMatch(interaction) {
     const user_id = user_info.user_id;
     const game_mode = interaction.options.getString('gamemode') ?? 'any';
     // Retrieve the last match
-    const last_match = await getLastMatch(user_id, game_mode);
+    let error;
+    const last_match = await getLastMatch(user_id).catch((err) => {
+        console.log("Error:", err);
+        error = err;
+    });
+    if (!last_match) {
+        return errorEmbed(error);
+    }
     // Get information about the last match
     const server_data = last_match.server_data;
     const map = server_data.MapName;
@@ -280,7 +299,14 @@ async function getEmbedFromRankedMatch(interaction) {
 
     const game_mode = interaction.options.getString('gamemode') ?? 'any';
     // Retrieve the last match
-    const last_match = await getLastRankedMatch(user_id, game_mode);
+    let error;
+    const last_match = await getLastRankedMatch(user_id).catch((err) => {
+        console.log("Error:", err);
+        error = err;
+    });
+    if (!last_match) {
+        return errorEmbed(error);
+    }
     // Get information about the last match
     const server_data = last_match.server_data;
     const map = server_data.MapName;
@@ -335,10 +361,12 @@ Deaths: ${p.deaths}`; if (p === ringoutLeader) value = `${Emotes["RingoutLeader"
     return embed;
 }
 
-
-
-
-
+function errorEmbed(error) {
+    return new Discord.EmbedBuilder()
+        .setColor("#0099ff")
+        .setTitle(`Error`)
+        .setDescription(error);
+}
 module.exports.getAccountData = getAccountData;
 module.exports.getidfromusername = getidfromusername;
 module.exports.getusernamefromid = getusernamefromid;
@@ -351,3 +379,4 @@ module.exports.getUserInfo = getUserInfo;
 module.exports.getEmbedFromCasualMatch = getEmbedFromCasualMatch;
 module.exports.getLastRankedMatch = getLastRankedMatch;
 module.exports.getEmbedFromRankedMatch = getEmbedFromRankedMatch;
+module.exports.errorEmbed = errorEmbed;
