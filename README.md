@@ -18,6 +18,8 @@ userspath=path to users.json file
   
 You will also need to create an empty users.json file. You can change the path to it, for example if you want to keep it on a mounted volume on deploy. 
 
+Run node install to install all dependencies.
+
 Then run node deploy-commands to deploy slash commands.
 
 Then run node . and your bot should be up and running!
