@@ -9,8 +9,8 @@
 	const fs = require('node:fs');
 	const path = require('node:path');
 	const { Client, GatewayIntentBits, Collection } = require('discord.js');
-	const { Client: MVSClient } = require('multiversus.js');
-	const generatemvstoken = require('./mvs/generatemvstoken.js');
+	const mvs = require("mvslib");
+	const { Client: MVSClient } = require("multiversus.js");
 
 	app.get(["/", "/:name"], (req, res) => {
 		greeting = "<h1>Hello From Node on Fly!</h1>";
@@ -45,7 +45,7 @@
 			client.on(event.name, (...args) => event.execute(...args));
 		}
 	}
-	const mvstoken = await generatemvstoken.getAccessToken();
+	const mvstoken = await mvs.generatemvstoken.getAccessToken();
 	mvs_client = new MVSClient({ accessToken: mvstoken });
 	await client.login(process.env.TOKEN);
 })();

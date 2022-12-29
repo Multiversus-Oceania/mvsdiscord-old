@@ -21,6 +21,7 @@
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "multiversus.js": "^2.1.3"
+    "multiversus.js": "^2.1.3",
+    "mvslib": "^1.0.1"
   }
 }

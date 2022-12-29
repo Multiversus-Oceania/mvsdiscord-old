@@ -1,8 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { getidfromusername, getusernamefromid, getUserLeaderboard, formatProfile } = require('../mvs/search.js');
 const fs = require('fs');
-const {getHighestRatedCharacter} = require("../mvs/search");
 require('dotenv').config();
+const mvs = require('mvslib');
+const { formatProfile } = require('../createEmbeds');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('elo')
@@ -15,13 +15,13 @@ module.exports = {
         // User is provided
         if (arg1 !== 'No user provided') {
             const username = interaction.options.getString('user');
-            user_id = await getidfromusername(username);
+            user_id = await mvs.Search.getidfromusername(username);
             if (user_id === 'Couldn\'t find user') {
                 await interaction.editReply('Couldn\'t find user');
                 return;
             }
-            wbname = await getusernamefromid(user_id);
-            profile = await getUserLeaderboard(user_id);
+            wbname = await mvs.Search.getusernamefromid(user_id);
+            profile = await mvs.Search.getUserLeaderboard(user_id);
             await formatProfile(profile, wbname, user_id, interaction);
         }
         // User not provided

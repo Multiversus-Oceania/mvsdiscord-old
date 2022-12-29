@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { User, addUserToJSONFile } = require('../mvs/users.js');
-const { getidfromusername, getusernamefromid } = require('../mvs/search.js');
+const mvs = require('mvslib');
 require('dotenv').config();
 module.exports = {
   data: new SlashCommandBuilder()
@@ -13,11 +12,12 @@ module.exports = {
     await interaction.deferReply();
     const platform = interaction.options.getString('platform') ?? 'wb_network';
     const username = interaction.options.getString('username');
-    const wbid = await getidfromusername(username);
-    const wbuser = await getusernamefromid(wbid, platform);
+    const wbid = await mvs.Search.getidfromusername(username);
+    const wbuser = await mvs.Search.getusernamefromid(wbid, platform);
+
     
-    const user = new User(interaction.member.id, wbuser, wbid);
-    addUserToJSONFile(user);
+    const user = new mvs.User(interaction.member.id, wbuser, wbid);
+    mvs.Users.addUserToJSONFile(user);
 
     // Reply to the user to confirm that their username has been registered
     await interaction.editReply(`Your Warner Bros username has been registered as "${wbuser}"`);

@@ -1,12 +1,7 @@
-// noinspection JSCheckFunctionSignatures
-
 const { SlashCommandBuilder } = require('discord.js');
-const Search = require('../mvs/search.js')
 const fs = require("fs");
-const Characters = require("../mvs/characters");
-const Discord = require("discord.js");
-const Maps = require("../mvs/maps");
-const Emotes = Maps.Emotes;
+const mvs = require('mvslib');
+const { getEmbedFromCasualMatch } = require('../createEmbeds');
 require('dotenv').config();
 module.exports = {
     data: new SlashCommandBuilder()
@@ -17,7 +12,7 @@ module.exports = {
     async execute(interaction) {
         // Get the username from the command options
         await interaction.deferReply();
-        const embed = await Search.getEmbedFromCasualMatch(interaction);
+        const embed = await getEmbedFromCasualMatch(interaction);
         // Reply to the user to confirm that their username has been registered
         await interaction.editReply({ embeds: [embed]});
     }};
