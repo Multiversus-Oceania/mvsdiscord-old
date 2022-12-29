@@ -13,4 +13,3 @@ module.exports = {
         // Reply to the user to confirm that their username has been registered
         await interaction.editReply(`Your Discord account has been unregistered from the bot`);
     }};
-
