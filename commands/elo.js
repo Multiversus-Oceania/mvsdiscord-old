@@ -34,7 +34,7 @@ module.exports = {
                 if (user) {
                     user_id = user.warnerBrosId;
                     wbname = user.warnerBrosName;
-                    profile = await getUserLeaderboard(user_id);
+                    profile = await mvs.Search.getUserLeaderboard(user_id);
                     await formatProfile(profile, wbname, user_id, interaction);
 
                 } else {
