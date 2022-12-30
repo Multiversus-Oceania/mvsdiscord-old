@@ -16,7 +16,7 @@ module.exports = {
     const wbuser = await mvs.Search.getusernamefromid(wbid, platform);
 
     
-    const user = new mvs.User(interaction.member.id, wbuser, wbid);
+    const user = new mvs.Users.User(interaction.member.id, wbuser, wbid);
     mvs.Users.addUserToJSONFile(user);
 
     // Reply to the user to confirm that their username has been registered
