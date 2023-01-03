@@ -189,8 +189,8 @@ async function formatProfile(profile, wbname, user_id, interaction) {
             .setTitle(`Player stats for ${wbname}`)
             .setAuthor({name: "taetae"})
             .addFields(
-                { name: `**1v1** ${emote1s}`, value: `Ranked Rating: ${ranked_rating1}\nTop character: ${top_1s}\nOverall rank (Unranked): ${profile.OneVsOne.rank}\nElo (Unranked): ${parseInt(profile.OneVsOne.score)}`, inline: true },
-                { name: `**2v2** ${emote2s}`, value: `Ranked Rating: ${ranked_rating2}\nTop character: ${top_2s}\nOverall rank (Unranked): ${profile.TwoVsTwo.rank}\nElo (Unranked): ${parseInt(profile.TwoVsTwo.score)}`, inline: true }
+                { name: `**1v1** ${emote1s}`, value: `Ranked Rating: ${parseInt(ranked_rating1)}\nTop character: ${top_1s}\nOverall rank (Unranked): ${profile.OneVsOne.rank}\nElo (Unranked): ${parseInt(profile.OneVsOne.score)}`, inline: true },
+                { name: `**2v2** ${emote2s}`, value: `Ranked Rating: ${parseInt(ranked_rating2)}\nTop character: ${top_2s}\nOverall rank (Unranked): ${profile.TwoVsTwo.rank}\nElo (Unranked): ${parseInt(profile.TwoVsTwo.score)}`, inline: true }
             )
         await interaction.editReply({ embeds: [embed]});
         resolve(embed);
